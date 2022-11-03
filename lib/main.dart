@@ -30,7 +30,7 @@ class HomePage extends HookWidget {
 // useMemoized will immediately call valueBuilder on first call and store its result. Later, when the HookWidget rebuilds,
 // the call to useMemoized will return the previously created instance without calling valueBuilder.
     final subject = useMemoized(
-      () => BehaviorSubject<String>(),
+          () => BehaviorSubject<String>(),
       [key],
     );
 
@@ -46,28 +46,29 @@ class HomePage extends HookWidget {
     useEffect(() => subject.close, [subject]);
 
     return Scaffold(
-      appBar: AppBar(
-        title: StreamBuilder<String>(
-          /// distinct Skips data events if they are equal to the previous data event.
-             /// Transforms a [Stream] so that will only emit items from the source
-             /// sequence whenever the time span defined by [duration] passes, without the
-             /// source sequence emitting another item.
+        appBar: AppBar(
+          title: StreamBuilder<String>(
+            /// distinct Skips data events if they are equal to the previous data event.
+            /// Transforms a [Stream] so that will only emit items from the source
+            /// sequence whenever the time span defined by [duration] passes, without the
+            /// source sequence emitting another item.
 
-             /// This time span start after the last debounced event was emitted.
-             ///
-             /// debounceTime filters out items emitted by the source [Stream] that are
-             /// rapidly followed by another emitted item.
-          stream: subject.distinct().debounceTime(const Duration(seconds: 1)),
-          initialData: 'Please start Typing......',
-          builder: (context,snapshot){
-            return Text(snapshot.requireData);
+            /// This time span start after the last debounced event was emitted.
+            ///
+            /// debounceTime filters out items emitted by the source [Stream] that are
+            /// rapidly followed by another emitted item.
+            stream: subject.distinct().debounceTime(const Duration(seconds: 1)),
+            initialData: 'Please start Typing......',
+            builder: (context,snapshot){
+              return Text(snapshot.requireData);
 
-          },
+            },
+          ),
         ),
-      ),
-      body: Padding(padding: EdgeInsets.all(8.0),child: TextField(
-          onChanged: subject.sink.add
-      ),)
+        body: Padding(padding: EdgeInsets.all(8.0),child: TextField(
+            onChanged: subject.sink.add
+        ),)
     );
   }
 }
+
